@@ -134,7 +134,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   // cout <<"JvRgt Size:       " << JvRgt.rows()   <<"x"<<   JvRgt.cols()  << endl;
   // cout <<"dJvRgt Size:      " << dJvRgt.rows()  <<"x"<<  dJvRgt.cols()  << endl;
 
-  int dof = mRobot->getNumDofs();
+  const int dof = (const int)mRobot->getNumDofs();
   // cout << "[update] DoF: " << dof << endl << endl << endl;
 
   // cout << "Left Jacobian Columns: " << endl;
@@ -151,10 +151,10 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   // cout << endl;
 
   // Weights
-  double weightRight, weightLeft;
+  double weightRight, weightLeft, weightRegulator;
   weightRight = 1.0;
-  weightLeft  = 1-weightRight;
-
+  weightLeft  = 1.0;
+  weightRegulator = 1.0;
   // Computing left and right P from Jacobians;
   Eigen::Vector3d zeroColumn(0.0, 0.0, 0.0);
   Eigen::Matrix<double, 3, 7> zero7Columns;
@@ -163,14 +163,14 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   // cout << "Computing zero-column vector and zero-7-column matrix .." << endl;
 
   Eigen::Matrix<double, 3, 18> FullJacobianRight;
-  FullJacobianRight <<  JvRgt.block<3,3>(0,0), zeroColumn, JvRgt.block<3,7>(0,3), zero7Columns;
+  FullJacobianRight <<  JvRgt.block<3,3>(0,0), zeroColumn, zero7Columns, JvRgt.block<3,7>(0,3);
   // cout <<"FullJacobianRight Size:  " << FullJacobianRight.rows()   <<"x"<<   FullJacobianRight.cols()  << endl;  //
   // cout << "Generated FullJacobianRight matrix ..." << endl;
   // cout << "Computed P-right against weight  using Full Jacobian Right ... !" << endl << endl << endl;
   // cout << PRight << endl << endl;
 
   Eigen::Matrix<double, 3, 18> FullJacobianLeft;
-  FullJacobianLeft  << JvLft.block<3,3>(0,0), zeroColumn, zero7Columns, JvLft.block<3,7>(0,3);
+  FullJacobianLeft  << JvLft.block<3,3>(0,0), zeroColumn, JvLft.block<3,7>(0,3), zero7Columns;
   // cout <<"FullJacobianLeft Size:  " << FullJacobianLeft.rows()   <<"x"<<   FullJacobianLeft.cols()  << endl;  //
   // cout << "Generated FullJacobianLeft matrix ..." << endl;
   // cout << "Computed P-left against weight  using Full Jacobian Left ... !" << endl << endl << endl;
@@ -178,7 +178,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
 
   // Computing left and right b from Jacobian derivative
   Eigen::Matrix<double, 3, 18> FullJacobianDerRgt;
-  FullJacobianDerRgt  <<  dJvRgt.block<3,3>(0,0), zeroColumn, dJvRgt.block<3,7>(0,3), zero7Columns;
+  FullJacobianDerRgt  <<  dJvRgt.block<3,3>(0,0), zeroColumn, zero7Columns, dJvRgt.block<3,7>(0,3);
   // cout <<"FullJacobianDerRgt Size:  " << FullJacobianDerRgt.rows()   <<"x"<<   FullJacobianDerRgt.cols()  << endl;  //
   // cout << "Generated FullJacobianDerRgt matrix ..." << endl;
   // cout <<"bRight Size:  " << bRight.rows()   <<"x"<<   bRight.cols()  << endl;  //
@@ -186,7 +186,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
 
 
   Eigen::Matrix<double, 3, 18> FullJacobianDerLft;
-  FullJacobianDerLft  <<  dJvLft.block<3,3>(0,0), zeroColumn, zero7Columns, dJvLft.block<3,7>(0,3);
+  FullJacobianDerLft  <<  dJvLft.block<3,3>(0,0), zeroColumn, dJvLft.block<3,7>(0,3), zero7Columns;
   // cout <<"FullJacobianDerLft Size:  " << FullJacobianDerLft.rows()   <<"x"<<   FullJacobianDerLft.cols()  << endl;  //
   // cout << "Generated FullJacobianDerLft matrix ..." << endl;
   // cout <<"bLeft Size:  " << bLeft.rows()   <<"x"<<   bLeft.cols()  << endl;  //
@@ -198,6 +198,9 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
 
   Eigen::VectorXd bRight  = -weightRight*( FullJacobianDerRgt*dq - ddxrefRgt );
   Eigen::VectorXd bLeft   = -weightLeft* ( FullJacobianDerLft*dq - ddxrefLft );
+ 
+  Eigen::MatrixXd PRegulator = weightRegulator*Eigen::MatrixXd::Identity(dof, dof);
+  Eigen::VectorXd bRegulator = -weightRegulator*10*dq;
 
   //
   // cout << "P Right:"  << endl << PRight << endl << endl;
@@ -212,14 +215,16 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   double minf;
 
   // Create optimization parameters P and b
-  Eigen::MatrixXd NewP(PRight.rows() + PLeft.rows(), PRight.cols() );
+  Eigen::MatrixXd NewP(PRight.rows() + PLeft.rows() + PRegulator.rows(), PRight.cols() );
   NewP << PRight,
-          PLeft;
+          PLeft,
+          PRegulator;
   cout <<"NewP Size:  " << NewP.rows()   <<"x"<<   NewP.cols()  << endl;  //
 
-  Eigen::VectorXd NewB(bRight.rows() + bLeft.rows(), bRight.cols() );
+  Eigen::VectorXd NewB(bRight.rows() + bLeft.rows() + bRegulator.rows(), bRight.cols() );
   NewB << bRight,
-          bLeft;
+          bLeft,
+          bRegulator;
   cout <<"NewB Size:  " << NewB.rows()   <<"x"<<   NewB.cols()  << endl;  //
 
   // Perform optimization to find joint accelerations

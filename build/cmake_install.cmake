@@ -1,4 +1,4 @@
-# Install script for directory: /home/mouhyemen/desktop/research/KrangDart/FixedWheel
+# Install script for directory: /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mouhyemen/desktop/research/KrangDart/FixedWheel/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

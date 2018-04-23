@@ -4,10 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/mouhyemen/desktop/research/KrangDart/FixedWheel/Controller.cpp" "/home/mouhyemen/desktop/research/KrangDart/FixedWheel/build/CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o"
-  "/home/mouhyemen/desktop/research/KrangDart/FixedWheel/Controller_backup.cpp" "/home/mouhyemen/desktop/research/KrangDart/FixedWheel/build/CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o"
-  "/home/mouhyemen/desktop/research/KrangDart/FixedWheel/Main.cpp" "/home/mouhyemen/desktop/research/KrangDart/FixedWheel/build/CMakeFiles/fixedWheelKrang.dir/Main.cpp.o"
-  "/home/mouhyemen/desktop/research/KrangDart/FixedWheel/MyWindow.cpp" "/home/mouhyemen/desktop/research/KrangDart/FixedWheel/build/CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o"
+  "/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Controller.cpp" "/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build/CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o"
+  "/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Controller_backup.cpp" "/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build/CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o"
+  "/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Main.cpp" "/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build/CMakeFiles/fixedWheelKrang.dir/Main.cpp.o"
+  "/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/MyWindow.cpp" "/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build/CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
