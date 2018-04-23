@@ -41,7 +41,8 @@ MyWindow::MyWindow(Controller* _controller)
   assert(_controller != nullptr);
 
   // Set the initial target positon to the initial position of the end effector
-  mTargetPosition = mController->getEndEffector("right")->getTransform().translation();
+  // mTargetPosition = mController->getEndEffector("right")->getTransform().translation();
+  mTargetPosition << -0.5, 0.8, -0.6;
 }
 
 //====================================================================

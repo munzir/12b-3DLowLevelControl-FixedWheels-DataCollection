@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=c++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -isystem /usr/local/include -isystem /usr/include/eigen3 
+CXX_INCLUDES = -I/usr/local/include -isystem /usr/include/eigen3 
 
