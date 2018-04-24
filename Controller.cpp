@@ -102,174 +102,81 @@ double optFunc(const std::vector<double> &x, std::vector<double> &grad, void *my
 void Controller::update(const Eigen::Vector3d& _targetPosition) {
   using namespace dart;
   using namespace std;
+  const int dof = (const int)mRobot->getNumDofs();
+  Eigen::VectorXd dq    = mRobot->getVelocities();                // n x 1
+  double weightRight = 1.0, weightLeft = 1.0, weightRegulator = 1.0, weightBalance = 10.0;
+  double KpzCOM = 750.0, KvzCOM = 250.0;
 
-  // Get the stuff that we need for left arm
+  // Left arm
   Eigen::Vector3d xLft    = mLeftEndEffector->getTransform().translation();
   Eigen::Vector3d dxLft   = mLeftEndEffector->getLinearVelocity();
   math::LinearJacobian JvLft   = mLeftEndEffector->getLinearJacobian();       // 3 x n
   math::LinearJacobian dJvLft  = mLeftEndEffector->getLinearJacobianDeriv();  // 3 x n
-
-  // // Get the stuff that we need for right arm
-  Eigen::Vector3d xRgt    = mRightEndEffector->getTransform().translation();
-  Eigen::Vector3d dxRgt   = mRightEndEffector->getLinearVelocity();
-  math::LinearJacobian JvRgt   = mRightEndEffector->getLinearJacobian();       // 3 x n
-  math::LinearJacobian dJvRgt  = mRightEndEffector->getLinearJacobianDeriv();  // 3 x n
-
-  // Get the stuff that we need for the robot
-  Eigen::MatrixXd M     = mRobot->getMassMatrix();                // n x n
-  Eigen::VectorXd Cg    = mRobot->getCoriolisAndGravityForces();  // n x 1
-  Eigen::VectorXd dq    = mRobot->getVelocities();                // n x 1
-
-  // ddxref for left and right arms
   Eigen::Vector3d ddxrefLft = -mKp*(xLft - _targetPosition) - mKv*dxLft;
-  Eigen::Vector3d ddxrefRgt = -mKp*(xRgt - _targetPosition) - mKv*dxRgt;
-
-  // cout <<"Matrix M Size:   " << M.rows()  <<"x"<<    M.cols()   << endl;
-  // cout <<"Coriolis C Size: " << Cg.rows() <<"x"<<   Cg.cols()   << endl;
-  // cout <<"Velocities Size: " << dq.rows() <<"x"<<   dq.cols()   << endl << endl;
-  // cout <<"Velocities: " << endl<< dq << endl << endl;
-  //
-  // cout <<"JvLft Size:       " << JvLft.rows()   <<"x"<<   JvLft.cols()  << endl;
-  // cout <<"dJvLft Size:      " << dJvLft.rows()  <<"x"<<  dJvLft.cols()  << endl;
-  // cout <<"JvRgt Size:       " << JvRgt.rows()   <<"x"<<   JvRgt.cols()  << endl;
-  // cout <<"dJvRgt Size:      " << dJvRgt.rows()  <<"x"<<  dJvRgt.cols()  << endl;
-
-  const int dof = (const int)mRobot->getNumDofs();
-  // cout << "[update] DoF: " << dof << endl << endl << endl;
-
-  // cout << "Left Jacobian Columns: " << endl;
-  // for (int i = 0; i < dof; i++) {
-  //   cout << "Column: " << i << endl;
-  //   cout << JvLft.col(i) << endl;
-  // }
-  // cout << endl;
-  // cout << "Right Jacobian Columns: " << endl;
-  // for (int i = 0; i < dof; i++) {
-  //   cout << "Column: " << i << endl;
-  //   cout << JvRgt.col(i) << endl;
-  // }
-  // cout << endl;
-
-  // Weights
-  double weightRight, weightLeft, weightRegulator;
-  weightRight = 1.0;
-  weightLeft  = 1.0;
-  weightRegulator = 1.0;
-  // Computing left and right P from Jacobians;
   Eigen::Vector3d zeroColumn(0.0, 0.0, 0.0);
   Eigen::Matrix<double, 3, 7> zero7Columns;
   zero7Columns << zeroColumn, zeroColumn, zeroColumn, zeroColumn, \
               zeroColumn, zeroColumn, zeroColumn;
-  // cout << "Computing zero-column vector and zero-7-column matrix .." << endl;
-
-  Eigen::Matrix<double, 3, 18> FullJacobianRight;
-  FullJacobianRight <<  JvRgt.block<3,3>(0,0), zeroColumn, zero7Columns, JvRgt.block<3,7>(0,3);
-  // cout <<"FullJacobianRight Size:  " << FullJacobianRight.rows()   <<"x"<<   FullJacobianRight.cols()  << endl;  //
-  // cout << "Generated FullJacobianRight matrix ..." << endl;
-  // cout << "Computed P-right against weight  using Full Jacobian Right ... !" << endl << endl << endl;
-  // cout << PRight << endl << endl;
-
   Eigen::Matrix<double, 3, 18> FullJacobianLeft;
   FullJacobianLeft  << JvLft.block<3,3>(0,0), zeroColumn, JvLft.block<3,7>(0,3), zero7Columns;
-  // cout <<"FullJacobianLeft Size:  " << FullJacobianLeft.rows()   <<"x"<<   FullJacobianLeft.cols()  << endl;  //
-  // cout << "Generated FullJacobianLeft matrix ..." << endl;
-  // cout << "Computed P-left against weight  using Full Jacobian Left ... !" << endl << endl << endl;
-  // cout << PLeft << endl << endl;
-
-  // Computing left and right b from Jacobian derivative
-  Eigen::Matrix<double, 3, 18> FullJacobianDerRgt;
-  FullJacobianDerRgt  <<  dJvRgt.block<3,3>(0,0), zeroColumn, zero7Columns, dJvRgt.block<3,7>(0,3);
-  // cout <<"FullJacobianDerRgt Size:  " << FullJacobianDerRgt.rows()   <<"x"<<   FullJacobianDerRgt.cols()  << endl;  //
-  // cout << "Generated FullJacobianDerRgt matrix ..." << endl;
-  // cout <<"bRight Size:  " << bRight.rows()   <<"x"<<   bRight.cols()  << endl;  //
-  // cout << "Computed b-right against weight using Full Jacobian Derivative Right ... !" << endl << endl << endl;
-
-
   Eigen::Matrix<double, 3, 18> FullJacobianDerLft;
   FullJacobianDerLft  <<  dJvLft.block<3,3>(0,0), zeroColumn, dJvLft.block<3,7>(0,3), zero7Columns;
-  // cout <<"FullJacobianDerLft Size:  " << FullJacobianDerLft.rows()   <<"x"<<   FullJacobianDerLft.cols()  << endl;  //
-  // cout << "Generated FullJacobianDerLft matrix ..." << endl;
-  // cout <<"bLeft Size:  " << bLeft.rows()   <<"x"<<   bLeft.cols()  << endl;  //
-  // cout << "Computed b-left against weight using Full Jacobian Derivative Left ... !" << endl << endl << endl;
-
-
-  Eigen::MatrixXd PRight  = weightRight*FullJacobianRight;
   Eigen::MatrixXd PLeft   = weightLeft*FullJacobianLeft;
-
-  Eigen::VectorXd bRight  = -weightRight*( FullJacobianDerRgt*dq - ddxrefRgt );
   Eigen::VectorXd bLeft   = -weightLeft* ( FullJacobianDerLft*dq - ddxrefLft );
- 
+
+  // Right Arm
+  Eigen::Vector3d xRgt    = mRightEndEffector->getTransform().translation();
+  Eigen::Vector3d dxRgt   = mRightEndEffector->getLinearVelocity();
+  math::LinearJacobian JvRgt   = mRightEndEffector->getLinearJacobian();       // 3 x n
+  math::LinearJacobian dJvRgt  = mRightEndEffector->getLinearJacobianDeriv();  // 3 x n
+  Eigen::Vector3d ddxrefRgt = -mKp*(xRgt - _targetPosition) - mKv*dxRgt;
+  Eigen::Matrix<double, 3, 18> FullJacobianRight;
+  FullJacobianRight <<  JvRgt.block<3,3>(0,0), zeroColumn, zero7Columns, JvRgt.block<3,7>(0,3);
+  Eigen::Matrix<double, 3, 18> FullJacobianDerRgt;
+  FullJacobianDerRgt  <<  dJvRgt.block<3,3>(0,0), zeroColumn, zero7Columns, dJvRgt.block<3,7>(0,3);
+  Eigen::MatrixXd PRight  = weightRight*FullJacobianRight;
+  Eigen::VectorXd bRight  = -weightRight*( FullJacobianDerRgt*dq - ddxrefRgt );
+
+  // CoM
+  double zCOM = mRobot->getCOM()(2);
+  double dzCOM = mRobot->getCOMLinearVelocity()(2);
+  Eigen::VectorXd JzCOM = mRobot->getCOMLinearJacobian().block<1,18>(2,0);
+  Eigen::VectorXd dJzCOM = mRobot->getCOMLinearJacobianDeriv().block<1,18>(2,0);
+  double ddzCOMref = -KpzCOM*zCOM - KvzCOM*dzCOM;
+  Eigen::MatrixXd PBalance = weightBalance*JzCOM;
+  double bBalance = -weightBalance*(dJzCOM.transpose()*dq - ddzCOMref);
+
+  // Regulator
   Eigen::MatrixXd PRegulator = weightRegulator*Eigen::MatrixXd::Identity(dof, dof);
   Eigen::VectorXd bRegulator = -weightRegulator*10*dq;
 
-  //
-  // cout << "P Right:"  << endl << PRight << endl << endl;
-  // cout << "P Left:"   << endl << PLeft  << endl << endl;
-  // cout << "b Right:"  << endl << bRight << endl << endl;
-  // cout << "b Left:"   << endl << bLeft  << endl << endl;
-
-  // // Optimizer stuff
-  nlopt::opt opt(nlopt::LD_MMA, dof);
+  // Optimizer stuff
   OptParams optParams;
-  std::vector<double> ddq_vec(dof);
-  double minf;
-
-  // Create optimization parameters P and b
-  Eigen::MatrixXd NewP(PRight.rows() + PLeft.rows() + PRegulator.rows(), PRight.cols() );
+  Eigen::MatrixXd NewP(PRight.rows() + PLeft.rows() + PRegulator.rows() + PBalance.cols(), PRight.cols() );
   NewP << PRight,
           PLeft,
-          PRegulator;
-  cout <<"NewP Size:  " << NewP.rows()   <<"x"<<   NewP.cols()  << endl;  //
-
-  Eigen::VectorXd NewB(bRight.rows() + bLeft.rows() + bRegulator.rows(), bRight.cols() );
+          PRegulator,
+          PBalance.transpose();
+  Eigen::VectorXd NewB(bRight.rows() + bLeft.rows() + bRegulator.rows() + 1, bRight.cols() );
   NewB << bRight,
           bLeft,
-          bRegulator;
-  cout <<"NewB Size:  " << NewB.rows()   <<"x"<<   NewB.cols()  << endl;  //
-
-  // Perform optimization to find joint accelerations
-  cout << "Passing optimizing parameters ...";
+          bRegulator,
+          bBalance;
   optParams.P = NewP;
   optParams.b = NewB;
-  cout << "Success !" << endl << endl;
-
-
+  nlopt::opt opt(nlopt::LD_MMA, dof);
+  std::vector<double> ddq_vec(dof);
+  double minf;
   opt.set_min_objective(optFunc, &optParams);
   opt.set_xtol_rel(1e-4);
   opt.set_maxtime(0.005);
   opt.optimize(ddq_vec, minf);
-
   Eigen::Matrix<double, 18, 1> ddq(ddq_vec.data());
-  // cout <<"Qdotdot Vector:      " << endl << ddq << endl;
-
-  //torques
-  double w0 = weightRight;
-  double w1 = weightLeft;
-  Eigen::Matrix<double, 18, 18> weightMatrix;
-
-  // weightMatrix << w0+w1,      0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,  w0+w1,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,  w0+w1, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,   w0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,   w0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,   w0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,   w0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,   w0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   w0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   w0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   w1,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   w1,  0.0,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   w1,  0.0,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   w1,  0.0,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   w1,  0.0,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   w1,  0.0,
-                      // 0.0,    0.0,    0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   w1;
-
-  // cout << weightMatrix << endl << endl;
+ 
+  // Torques
+  Eigen::MatrixXd M     = mRobot->getMassMatrix();                // n x n
+  Eigen::VectorXd Cg    = mRobot->getCoriolisAndGravityForces();  // n x 1
   mForces = M*ddq + Cg;
-  // cout << "Forces:" << endl << mForces << endl;
-  // Apply the joint space forces to the robot
   mRobot->setForces(mForces);
 }
 
