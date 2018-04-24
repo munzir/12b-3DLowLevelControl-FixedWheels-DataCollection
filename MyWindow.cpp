@@ -79,7 +79,14 @@ void MyWindow::drawWorld() const {
     mRI->pushMatrix();
     mRI->translate(mTargetPosition);
     mRI->drawEllipsoid(Eigen::Vector3d(0.05, 0.05, 0.05));
-    mRI->popMatrix();
+    mRI->popMatrix();    
+
+    mRI->setPenColor(Eigen::Vector3d(0.2, 0.2, 0.8));
+    mRI->pushMatrix();
+    mRI->translate(mWorld->getSkeleton("krang")->getCOM());
+    mRI->drawEllipsoid(Eigen::Vector3d(0.05, 0.05, 0.05));
+    mRI->popMatrix();    
+    
   }
 
   // Draw world
