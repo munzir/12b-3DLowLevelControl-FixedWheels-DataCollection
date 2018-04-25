@@ -52,10 +52,10 @@ Controller::Controller(dart::dynamics::SkeletonPtr _robot,
   mTime = 0;
 
   mForces.setZero(dof);
-  mKp.setZero();
-  mKv.setZero();
+  mKp = Eigen::Matrix<double, 18, 18>::Zero();
+  mKv = Eigen::Matrix<double, 18, 18>::Zero();
 
-  for (int i = 0; i < 3; ++i) {
+  for (int i = 0; i < dof; ++i) {
     mKp(i, i) = 750.0;
     mKv(i, i) = 250.0;
   }
@@ -151,8 +151,9 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   double dt = 0.001;
 
   // Define coefficients for sinusoidal, pulsation frequency for q and dq
-  double wf = 0.558048373585;
-  Eigen::Matrix<double, 16, 4> a, b;
+  // double wf = 0.558048373585;
+  double wf = 0.8;
+  Eigen::Matrix<double, 18, 4> a, b;
   a << -0.009, -0.36, 0.311, -0.362,
         0.095, -0.132, -0.363, 0.474,
         -0.418, -0.25, -0.12, 0.119,
@@ -195,6 +196,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   q0 << 0.235, -0.004, -0.071, 0.095, -0.141, 0.208, -0.182, 0.095, 0.096,
         0.235, -0.004, -0.071, 0.095, -0.141, 0.208, -0.182, 0.095, 0.096;
   
+
   // Compute joint angles & velocities using Pulsed Trajectories
   Eigen::Matrix<double, 18, 1> qref;
   Eigen::Matrix<double, 18, 1> dqref;
@@ -222,7 +224,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   Eigen::VectorXd  q    = mRobot->getPositions();                 // n x 1
   Eigen::VectorXd dq    = mRobot->getVelocities();                // n x 1
   Eigen::VectorXd ddq   = mRobot->getAccelerations();             // n x 1
-  Eigen::VectorXd ddqref = -mKp*(q - qref) - mKv*(dq - dqref);    // n x 1
+  Eigen::VectorXd ddqref = -mKp*(q - qref);// - mKv*(dq - dqref);    // n x 1
 
   // Optimizer stuff
   nlopt::opt opt(nlopt::LD_MMA, 18);
