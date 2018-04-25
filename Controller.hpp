@@ -89,10 +89,10 @@ private:
   Eigen::VectorXd mForces;
 
   /// \brief Proportional gain for the virtual spring forces at the end effector
-  Eigen::Matrix3d mKp;
+  Eigen::Matrix<double,18,18> mKp;
 
   /// \brief Derivative gain for the virtual spring forces at the end effector
-  Eigen::Matrix3d mKv;
+  Eigen::Matrix<double,18,18> mKv;
 };
 
 #endif  // EXAMPLES_OPERATIONALSPACECONTROL_CONTROLLER_HPP_
