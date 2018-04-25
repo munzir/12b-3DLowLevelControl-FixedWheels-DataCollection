@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels
+CMAKE_SOURCE_DIR = /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build
+CMAKE_BINARY_DIR = /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/fixedWheelKrang.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/fixedWheelKrang.dir/flags.make
 
 CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o: CMakeFiles/fixedWheelKrang.dir/flags.make
 CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o: ../MyWindow.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o -c /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/MyWindow.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o -c /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/MyWindow.cpp
 
 CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/MyWindow.cpp > CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/MyWindow.cpp > CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.i
 
 CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/MyWindow.cpp -o CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/MyWindow.cpp -o CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.s
 
 CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o.requires:
 
@@ -81,18 +81,42 @@ CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o.provides: CMakeFiles/fixedWheelKra
 CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o.provides.build: CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o
 
 
+CMakeFiles/fixedWheelKrang.dir/Main.cpp.o: CMakeFiles/fixedWheelKrang.dir/flags.make
+CMakeFiles/fixedWheelKrang.dir/Main.cpp.o: ../Main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/fixedWheelKrang.dir/Main.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fixedWheelKrang.dir/Main.cpp.o -c /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/Main.cpp
+
+CMakeFiles/fixedWheelKrang.dir/Main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/fixedWheelKrang.dir/Main.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/Main.cpp > CMakeFiles/fixedWheelKrang.dir/Main.cpp.i
+
+CMakeFiles/fixedWheelKrang.dir/Main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/fixedWheelKrang.dir/Main.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/Main.cpp -o CMakeFiles/fixedWheelKrang.dir/Main.cpp.s
+
+CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.requires:
+
+.PHONY : CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.requires
+
+CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.provides: CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.requires
+	$(MAKE) -f CMakeFiles/fixedWheelKrang.dir/build.make CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.provides.build
+.PHONY : CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.provides
+
+CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.provides.build: CMakeFiles/fixedWheelKrang.dir/Main.cpp.o
+
+
 CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o: CMakeFiles/fixedWheelKrang.dir/flags.make
 CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o: ../Controller.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o -c /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Controller.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o -c /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/Controller.cpp
 
 CMakeFiles/fixedWheelKrang.dir/Controller.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/fixedWheelKrang.dir/Controller.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Controller.cpp > CMakeFiles/fixedWheelKrang.dir/Controller.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/Controller.cpp > CMakeFiles/fixedWheelKrang.dir/Controller.cpp.i
 
 CMakeFiles/fixedWheelKrang.dir/Controller.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/fixedWheelKrang.dir/Controller.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Controller.cpp -o CMakeFiles/fixedWheelKrang.dir/Controller.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/Controller.cpp -o CMakeFiles/fixedWheelKrang.dir/Controller.cpp.s
 
 CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o.requires:
 
@@ -107,16 +131,16 @@ CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o.provides.build: CMakeFiles/fixed
 
 CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o: CMakeFiles/fixedWheelKrang.dir/flags.make
 CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o: ../Controller_backup.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o -c /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Controller_backup.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o -c /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/Controller_backup.cpp
 
 CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Controller_backup.cpp > CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/Controller_backup.cpp > CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.i
 
 CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Controller_backup.cpp -o CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/Controller_backup.cpp -o CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.s
 
 CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o.requires:
 
@@ -129,44 +153,20 @@ CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o.provides: CMakeFiles/fixe
 CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o.provides.build: CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o
 
 
-CMakeFiles/fixedWheelKrang.dir/Main.cpp.o: CMakeFiles/fixedWheelKrang.dir/flags.make
-CMakeFiles/fixedWheelKrang.dir/Main.cpp.o: ../Main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/fixedWheelKrang.dir/Main.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fixedWheelKrang.dir/Main.cpp.o -c /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Main.cpp
-
-CMakeFiles/fixedWheelKrang.dir/Main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/fixedWheelKrang.dir/Main.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Main.cpp > CMakeFiles/fixedWheelKrang.dir/Main.cpp.i
-
-CMakeFiles/fixedWheelKrang.dir/Main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/fixedWheelKrang.dir/Main.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/Main.cpp -o CMakeFiles/fixedWheelKrang.dir/Main.cpp.s
-
-CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.requires:
-
-.PHONY : CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.requires
-
-CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.provides: CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.requires
-	$(MAKE) -f CMakeFiles/fixedWheelKrang.dir/build.make CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.provides.build
-.PHONY : CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.provides
-
-CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.provides.build: CMakeFiles/fixedWheelKrang.dir/Main.cpp.o
-
-
 # Object files for target fixedWheelKrang
 fixedWheelKrang_OBJECTS = \
 "CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o" \
+"CMakeFiles/fixedWheelKrang.dir/Main.cpp.o" \
 "CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o" \
-"CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o" \
-"CMakeFiles/fixedWheelKrang.dir/Main.cpp.o"
+"CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o"
 
 # External object files for target fixedWheelKrang
 fixedWheelKrang_EXTERNAL_OBJECTS =
 
 fixedWheelKrang: CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o
+fixedWheelKrang: CMakeFiles/fixedWheelKrang.dir/Main.cpp.o
 fixedWheelKrang: CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o
 fixedWheelKrang: CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o
-fixedWheelKrang: CMakeFiles/fixedWheelKrang.dir/Main.cpp.o
 fixedWheelKrang: CMakeFiles/fixedWheelKrang.dir/build.make
 fixedWheelKrang: /usr/local/lib/libdart-utils-urdf.so.6.3.0
 fixedWheelKrang: /usr/local/lib/libdart-gui.so.6.3.0
@@ -193,7 +193,7 @@ fixedWheelKrang: /usr/lib/x86_64-linux-gnu/libGL.so
 fixedWheelKrang: /usr/local/lib/libdart-external-lodepng.so.6.3.0
 fixedWheelKrang: /usr/local/lib/libdart-external-imgui.so.6.3.0
 fixedWheelKrang: CMakeFiles/fixedWheelKrang.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable fixedWheelKrang"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable fixedWheelKrang"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/fixedWheelKrang.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -202,9 +202,9 @@ CMakeFiles/fixedWheelKrang.dir/build: fixedWheelKrang
 .PHONY : CMakeFiles/fixedWheelKrang.dir/build
 
 CMakeFiles/fixedWheelKrang.dir/requires: CMakeFiles/fixedWheelKrang.dir/MyWindow.cpp.o.requires
+CMakeFiles/fixedWheelKrang.dir/requires: CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.requires
 CMakeFiles/fixedWheelKrang.dir/requires: CMakeFiles/fixedWheelKrang.dir/Controller.cpp.o.requires
 CMakeFiles/fixedWheelKrang.dir/requires: CMakeFiles/fixedWheelKrang.dir/Controller_backup.cpp.o.requires
-CMakeFiles/fixedWheelKrang.dir/requires: CMakeFiles/fixedWheelKrang.dir/Main.cpp.o.requires
 
 .PHONY : CMakeFiles/fixedWheelKrang.dir/requires
 
@@ -213,6 +213,6 @@ CMakeFiles/fixedWheelKrang.dir/clean:
 .PHONY : CMakeFiles/fixedWheelKrang.dir/clean
 
 CMakeFiles/fixedWheelKrang.dir/depend:
-	cd /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build /home/panda/myfolder/wholebodycontrol/12a-3DLowLevelControl-FixedWheels/build/CMakeFiles/fixedWheelKrang.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/build /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/build /home/krang/dart/12b-3DLowLevelControl-FixedWheels-DataCollection/build/CMakeFiles/fixedWheelKrang.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/fixedWheelKrang.dir/depend
 

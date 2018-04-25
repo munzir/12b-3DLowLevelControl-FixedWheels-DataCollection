@@ -35,6 +35,9 @@
 #include <Eigen/Eigen>
 #include <string>
 #include <dart/dart.hpp>
+#include <fstream>
+#include <iostream>
+using namespace std;
 
 /// \brief Operational space controller for 6-dof manipulator
 class Controller {
@@ -60,6 +63,19 @@ public:
   virtual void keyboard(unsigned char _key, int _x, int _y);
 
 private:
+  /// File handles for dumping data
+  ofstream dataQ;
+  ofstream dataQref;
+  ofstream dataQdot;
+  ofstream dataQdotdot;
+  ofstream dataTorque;
+  ofstream dataTime;
+  ofstream dataM;
+  ofstream dataCg;
+  ofstream dataError;
+
+  double mTime;
+  
   /// \brief Robot
   dart::dynamics::SkeletonPtr mRobot;
 
