@@ -127,6 +127,7 @@ double optFunc(const std::vector<double> &x, std::vector<double> &grad, void *my
     }
   return (0.5 * pow((optParams->P*X - optParams->b).norm(), 2));
   }
+
   //==============================================================================
   template <typename T> int sgn(T val) {
       return (T(0) < val) - (val < T(0));
@@ -144,15 +145,14 @@ double optFunc(const std::vector<double> &x, std::vector<double> &grad, void *my
 
 //=========================================================================
 void Controller::update(const Eigen::Vector3d& _targetPosition) {
-  using namespace dart;
-  using namespace std;
+  // using namespace dart;
+  // using namespace std;
 
   const int dof = (const int)mRobot->getNumDofs(); // n x 1
   double dt = 0.001;
 
   // Define coefficients for sinusoidal, pulsation frequency for q and dq
-  // double wf = 0.558048373585;
-  double wf = 0.8;
+  double wf = 0.558048373585;
   Eigen::Matrix<double, 18, 4> a, b;
   a << -0.009, -0.36, 0.311, -0.362,
         0.095, -0.132, -0.363, 0.474,
@@ -170,8 +170,8 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
         -0.247, -0.166, 0.315, 0.031,
         0.366, 0.366, 0.302, -0.373,
         -0.247, -0.166, 0.315, 0.031,
-        0.366, 0.366, 0.302, -0.373,
-        -0.247, -0.166, 0.315, 0.031;
+        -0.009, -0.36, 0.311, -0.362,
+        0.095, -0.132, -0.363, 0.474;
 
   b <<  -0.051, 0.027, 0.003, -0.332,
         -0.292, 0.358, -0.056, -0.436,
@@ -189,12 +189,12 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
         -0.046, 0.135, -0.428, 0.387,
         -0.39, -0.085, 0.388, 0.46,
         -0.046, 0.135, -0.428, 0.387,
-        -0.39, -0.085, 0.388, 0.46,
-        -0.046, 0.135, -0.428, 0.387;
-
+        -0.046, 0.135, -0.428, 0.387,
+        -0.051, 0.027, 0.003, -0.332;
+        
   Eigen::Matrix<double, 18, 1> q0;
   q0 << 0.235, -0.004, -0.071, 0.095, -0.141, 0.208, -0.182, 0.095, 0.096,
-        0.235, -0.004, -0.071, 0.095, -0.141, 0.208, -0.182, 0.095, 0.096;
+        0.071, -0.004, -0.071, 0.095, -0.141, 0.208, -0.182, 0.095, 0.096;
   
 
   // Compute joint angles & velocities using Pulsed Trajectories
@@ -207,10 +207,13 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   cout << "Time: " << mTime << endl;
   for (int joint = 0; joint < dof; joint++) {
     for (int l = 1; l <= 4; l++) {
+
       qref(joint) = qref(joint) + (a(joint, l-1)/(wf*l))*sin(wf*l*mTime)
       - (b(joint, l-1)/(wf*l))*cos(wf*l*mTime);
+
       dqref(joint) = dqref(joint) + a(joint,l-1)*cos(wf*l*mTime)
       + b(joint, l-1)*sin(wf*l*mTime);
+      
     }
   }
 
@@ -224,7 +227,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   Eigen::VectorXd  q    = mRobot->getPositions();                 // n x 1
   Eigen::VectorXd dq    = mRobot->getVelocities();                // n x 1
   Eigen::VectorXd ddq   = mRobot->getAccelerations();             // n x 1
-  Eigen::VectorXd ddqref = -mKp*(q - qref);// - mKv*(dq - dqref);    // n x 1
+  Eigen::VectorXd ddqref = -mKp*(q - qref) - mKv*(dq - dqref);    // n x 1
 
   // Optimizer stuff
   nlopt::opt opt(nlopt::LD_MMA, 18);
@@ -251,24 +254,24 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
  //torques
   mForces = M*ddqRef + Cg;
   Eigen::Matrix<double, 18, 18> errCoeff = Eigen::Matrix<double, 18, 18>::Identity();
-  errCoeff(0,0) = 30.0;
-  errCoeff(1,1) = 200.0;
-  errCoeff(2,2) = 15.0;
-  errCoeff(3,3) = 100.0;
-  errCoeff(4,4) =  3.0;
-  errCoeff(5,5) = 25.0;
-  errCoeff(6,6) =  1.0;
-  errCoeff(7,7) = 30.0;
-  errCoeff(8,8) = 200.0;
-  errCoeff(9,9) = 15.0;
-  errCoeff(10,10) = 100.0;
-  errCoeff(11,11) =  3.0;
-  errCoeff(12,12) = 25.0;
-  errCoeff(13,13) =  1.0;
-  errCoeff(14,14) = 25.0;
-  errCoeff(15,15) =  1.0;
-  errCoeff(16,16) = 30.0;
-  errCoeff(17,17) = 200.0;
+  errCoeff(0,0) = 0;
+  errCoeff(1,1) = 0;
+  errCoeff(2,2) = 0;
+  errCoeff(3,3) = 0;
+  errCoeff(4,4) =  0;
+  errCoeff(5,5) = 0;
+  errCoeff(6,6) =  0;
+  errCoeff(7,7) = 0;
+  errCoeff(8,8) = 0;
+  errCoeff(9,9) = 0;
+  errCoeff(10,10) = 0;
+  errCoeff(11,11) =  0;
+  errCoeff(12,12) = 0;
+  errCoeff(13,13) =  0;
+  errCoeff(14,14) = 0;
+  errCoeff(15,15) = 0;
+  errCoeff(16,16) = 0;
+  errCoeff(17,17) = 0;
 
 
   Eigen::VectorXd mForceErr = mForces + errCoeff*error(dq, dof);
