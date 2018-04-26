@@ -314,6 +314,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
 //=========================================================================
 dart::dynamics::SkeletonPtr Controller::getRobot() const {
   return mRobot;
+  //
 }
 
 //=========================================================================
