@@ -1,0 +1,20 @@
+  errCoeff(0,0) = 	200.0;
+  errCoeff(1,1) = 	500.0;
+  errCoeff(2,2) = 	500.0;
+  errCoeff(3,3) = 	30.0;
+  errCoeff(4,4) =  	1.0;
+
+  errCoeff(5,5) = 	30.0;
+  errCoeff(6,6) =  	5.0;
+  errCoeff(7,7) = 	15.0;
+  errCoeff(8,8) = 	0.3;
+  errCoeff(9,9) = 	25.0;
+  errCoeff(10,10) = 5.0;
+
+  errCoeff(11,11) = 15.0;
+  errCoeff(12,12) = 75.0;
+  errCoeff(13,13) = 4.0;
+  errCoeff(14,14) = 15.0;
+  errCoeff(15,15) = 0.5;
+  errCoeff(16,16) = 10.0;
+  errCoeff(17,17) = 15.0;

@@ -1,0 +1,22 @@
+Apr 26, Thursday
+w = 0.5580
+Trajectories generated for 2*Time period
+
+  errCoeff(0,0) = 0;
+  errCoeff(1,1) = 0;
+  errCoeff(2,2) = 0;
+  errCoeff(3,3) = 0;
+  errCoeff(4,4) =  0;
+  errCoeff(5,5) = 0;
+  errCoeff(6,6) =  0;
+  errCoeff(7,7) = 0;
+  errCoeff(8,8) = 0;
+  errCoeff(9,9) = 0;
+  errCoeff(10,10) = 0;
+  errCoeff(11,11) =  0;
+  errCoeff(12,12) = 0;
+  errCoeff(13,13) =  0;
+  errCoeff(14,14) = 0;
+  errCoeff(15,15) = 0;
+  errCoeff(16,16) = 0;
+  errCoeff(17,17) = 0;

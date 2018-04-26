@@ -69,31 +69,31 @@ Controller::Controller(dart::dynamics::SkeletonPtr _robot,
     _robot->getJoint(i)->setDampingCoefficient(0, 0.5);
 
     // Dump data
-  dataQ.open      ("./data/dataQ.txt");
+  dataQ.open      ("../data/dataQ.txt");
   dataQ       << "dataQ" << endl;
 
-  dataQref.open   ("./data/dataQref.txt");
+  dataQref.open   ("../data/dataQref.txt");
   dataQref    << "dataQref" << endl;
 
-  dataQdot.open   ("./data/dataQdot.txt");
+  dataQdot.open   ("../data/dataQdot.txt");
   dataQdot    << "dataQdot" << endl;
 
-  dataQdotdot.open("./data/dataQdotdot.txt");
+  dataQdotdot.open("../data/dataQdotdot.txt");
   dataQdotdot << "dataQdotdot" << endl;
 
-  dataTorque.open ("./data/dataTorque.txt");
+  dataTorque.open ("../data/dataTorque.txt");
   dataTorque  << "dataTorque" << endl;
 
-  dataTime.open   ("./data/dataTime.txt");
+  dataTime.open   ("../data/dataTime.txt");
   dataTime    << "dataTime" << endl;
 
-  dataM.open      ("./data/dataM.txt");
+  dataM.open      ("../data/dataM.txt");
   dataM       << "dataM" << endl;
 
-  dataCg.open     ("./data/dataCg.txt");
+  dataCg.open     ("../data/dataCg.txt");
   dataCg      << "dataCg" << endl;
 
-  dataError.open  ("./data/dataError.txt");
+  dataError.open  ("../data/dataError.txt");
   dataError   << "dataError" << endl;
 }
 
@@ -153,6 +153,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
 
   // Define coefficients for sinusoidal, pulsation frequency for q and dq
   double wf = 0.558048373585;
+  // double wf = 0.95;
   Eigen::Matrix<double, 18, 4> a, b;
   a << -0.009, -0.36, 0.311, -0.362,
         0.095, -0.132, -0.363, 0.474,
@@ -254,24 +255,26 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
  //torques
   mForces = M*ddqRef + Cg;
   Eigen::Matrix<double, 18, 18> errCoeff = Eigen::Matrix<double, 18, 18>::Identity();
-  errCoeff(0,0) = 0;
-  errCoeff(1,1) = 0;
-  errCoeff(2,2) = 0;
-  errCoeff(3,3) = 0;
-  errCoeff(4,4) =  0;
-  errCoeff(5,5) = 0;
-  errCoeff(6,6) =  0;
-  errCoeff(7,7) = 0;
-  errCoeff(8,8) = 0;
-  errCoeff(9,9) = 0;
-  errCoeff(10,10) = 0;
-  errCoeff(11,11) =  0;
-  errCoeff(12,12) = 0;
-  errCoeff(13,13) =  0;
-  errCoeff(14,14) = 0;
-  errCoeff(15,15) = 0;
-  errCoeff(16,16) = 0;
-  errCoeff(17,17) = 0;
+  errCoeff(0,0) = 	200.0;
+  errCoeff(1,1) = 	500.0;
+  errCoeff(2,2) = 	500.0;
+  errCoeff(3,3) = 	30.0;
+  errCoeff(4,4) =  	1.0;
+
+  errCoeff(5,5) = 	30.0;
+  errCoeff(6,6) =  	5.0;
+  errCoeff(7,7) = 	15.0;
+  errCoeff(8,8) = 	0.3;
+  errCoeff(9,9) = 	25.0;
+  errCoeff(10,10) = 5.0;
+
+  errCoeff(11,11) = 15.0;
+  errCoeff(12,12) = 75.0;
+  errCoeff(13,13) = 4.0;
+  errCoeff(14,14) = 15.0;
+  errCoeff(15,15) = 0.5;
+  errCoeff(16,16) = 10.0;
+  errCoeff(17,17) = 15.0;
 
 
   Eigen::VectorXd mForceErr = mForces + errCoeff*error(dq, dof);
