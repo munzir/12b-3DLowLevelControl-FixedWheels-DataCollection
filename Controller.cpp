@@ -39,31 +39,31 @@ Controller::Controller(dart::dynamics::SkeletonPtr _robot,
   mSteps = 0;
 
     // Dump data
-  dataQ.open      ("../data/dataQ.txt");
+  dataQ.open      ("./data3/dataQ.txt");
   dataQ       << "dataQ" << endl;
 
-  dataQref.open   ("../data/dataQref.txt");
+  dataQref.open   ("./data3/dataQref.txt");
   dataQref    << "dataQref" << endl;
 
-  dataQdot.open   ("../data/dataQdot.txt");
+  dataQdot.open   ("./data3/dataQdot.txt");
   dataQdot    << "dataQdot" << endl;
 
-  dataQdotdot.open("../data/dataQdotdot.txt");
+  dataQdotdot.open("./data3/dataQdotdot.txt");
   dataQdotdot << "dataQdotdot" << endl;
 
-  dataTorque.open ("../data/dataTorque.txt");
+  dataTorque.open ("./data3/dataTorque.txt");
   dataTorque  << "dataTorque" << endl;
 
-  dataTime.open   ("../data/dataTime.txt");
+  dataTime.open   ("./data3/dataTime.txt");
   dataTime    << "dataTime" << endl;
 
-  dataM.open      ("../data/dataM.txt");
+  dataM.open      ("./data3/dataM.txt");
   dataM       << "dataM" << endl;
 
-  dataCg.open     ("../data/dataCg.txt");
+  dataCg.open     ("./data3/dataCg.txt");
   dataCg      << "dataCg" << endl;
 
-  dataError.open  ("../data/dataError.txt");
+  dataError.open  ("./data3/dataError.txt");
   dataError   << "dataError" << endl;
 }
 
@@ -182,10 +182,10 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
 
   // base, waist, torso, kinect, left[1-7], right [1-7]
   Eigen::Matrix<double, 18, 4> a, b;
-  a <<  0.009, -0.36, 0.311, -0.362,
-        0.095, -0.132, -0.363, 0.474,
-        -0.418, -0.25, -0.12, 0.119,
-        0.023, 0.113, 0.497, 0.213,
+  a <<  0.900, 0.036, 0.311, -0.623,
+        0.095, 0.102, -0.063, 0.774,
+        0.018, 0.25, 0.312, -0.919,
+        0.023, 0.311, 0.407, 0.013,
 
         -0.009, -0.36, 0.311, -0.362,
         0.095, -0.132, -0.363, 0.474,
@@ -205,10 +205,10 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
 
 
 
-  b <<  -0.051, 0.027, 0.003, -0.332,
-        -0.292, 0.358, -0.056, -0.436,
-        -0.355, 0.039, -0.397, -0.445,
-        0.328, 0.256, -0.36, 0.143,
+  b <<  -0.051, 0.027, 0.403, 0.032,
+        0.292, -0.78, 0.56, 0.436,
+        0.055, 0.539, -0.0397, -0.645,
+        0.48, 0.056, -0.306, -0.53,
 
         -0.051, 0.027, 0.003, -0.332,
         -0.292, 0.358, -0.056, -0.436,
@@ -241,7 +241,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
           0, 0, 0, 0, 0, 0, 0, 0, 0;
   dqref = qref;
 
-  cout << "Time: " << mTime << endl;
+  cout << "Time: " << mTime << " and qref_vec[0]: "<< qref_vec[0] << endl;
   for (int joint = 1; joint < dof; joint++) {
     for (int l = 1; l <= 4; l++) {
 
@@ -295,11 +295,20 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   }
 
   mTime += dt;
-
+  if (qref_vec[0] < 0.2)
+  {
+    qref_vec[0] = 0.2;
+  }
+  else if (qref_vec[0] > 0.75)
+  {
+    qref_vec[0] = 0.75;
+  }
+  
   qref(0) = qref_vec[0];
+  
 
-  dqref(0) = (mSteps==1? 0:((qref_vec[0] - prev_qref0)/dt));
-
+  dqref(0) = (mSteps==1? 0:((qref(0) - prev_qref0)/dt));
+  cout << "dqref[0]: " <<dqref[0] << endl;
   
   // Get the stuff that we need
   Eigen::MatrixXd  M    = mRobot->getMassMatrix();                // n x n
@@ -371,7 +380,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   dataError   << (errCoeff*error(dq, dof)).transpose() << endl;
 
   // Closing operation
-  double T = 2*3.1416/wf;
+  double T = 3.1416;
   if (mTime >= 1*T ) {
     cout << "Time period met. Stopping data recording ...";
     dataQ.close();
