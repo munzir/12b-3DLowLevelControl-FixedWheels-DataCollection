@@ -39,31 +39,31 @@ Controller::Controller(dart::dynamics::SkeletonPtr _robot,
   mSteps = 0;
 
     // Dump data
-  dataQ.open      ("./data3/dataQ.txt");
+  dataQ.open      ("./data5/dataQ.txt");
   dataQ       << "dataQ" << endl;
 
-  dataQref.open   ("./data3/dataQref.txt");
+  dataQref.open   ("./data5/dataQref.txt");
   dataQref    << "dataQref" << endl;
 
-  dataQdot.open   ("./data3/dataQdot.txt");
+  dataQdot.open   ("./data5/dataQdot.txt");
   dataQdot    << "dataQdot" << endl;
 
-  dataQdotdot.open("./data3/dataQdotdot.txt");
+  dataQdotdot.open("./data5/dataQdotdot.txt");
   dataQdotdot << "dataQdotdot" << endl;
 
-  dataTorque.open ("./data3/dataTorque.txt");
+  dataTorque.open ("./data5/dataTorque.txt");
   dataTorque  << "dataTorque" << endl;
 
-  dataTime.open   ("./data3/dataTime.txt");
+  dataTime.open   ("./data5/dataTime.txt");
   dataTime    << "dataTime" << endl;
 
-  dataM.open      ("./data3/dataM.txt");
+  dataM.open      ("./data5/dataM.txt");
   dataM       << "dataM" << endl;
 
-  dataCg.open     ("./data3/dataCg.txt");
+  dataCg.open     ("./data5/dataCg.txt");
   dataCg      << "dataCg" << endl;
 
-  dataError.open  ("./data3/dataError.txt");
+  dataError.open  ("./data5/dataError.txt");
   dataError   << "dataError" << endl;
 }
 
@@ -182,10 +182,10 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
 
   // base, waist, torso, kinect, left[1-7], right [1-7]
   Eigen::Matrix<double, 18, 4> a, b;
-  a <<  0.900, 0.036, 0.311, -0.623,
-        0.095, 0.102, -0.063, 0.774,
-        0.018, 0.25, 0.312, -0.919,
-        0.023, 0.311, 0.407, 0.013,
+  a <<  0.004, 0.639, -0.011, -0.023,
+        0.095, 0.502, 0.13, -0.704,
+        0.181, 0.52, 0.12, -0.19,
+        -0.23, 0.11, 0.076, 0.32,
 
         -0.009, -0.36, 0.311, -0.362,
         0.095, -0.132, -0.363, 0.474,
@@ -205,10 +205,10 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
 
 
 
-  b <<  -0.051, 0.027, 0.403, 0.032,
-        0.292, -0.78, 0.56, 0.436,
-        0.055, 0.539, -0.0397, -0.645,
-        0.48, 0.056, -0.306, -0.53,
+  b <<  -0.051, 0.027, 0.003, 0.302,
+        0.092, -0.28, 0.56, -0.136,
+        -0.25, 0.009, 0.397, -0.245,
+        -0.84, -0.056, -0.306, -0.53,
 
         -0.051, 0.027, 0.003, -0.332,
         -0.292, 0.358, -0.056, -0.436,
