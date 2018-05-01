@@ -14,6 +14,7 @@ class Controller {
 public:
   /// \brief Constructor
   Controller( dart::dynamics::SkeletonPtr _robot,
+              dart::dynamics::SkeletonPtr _robotopt,
               dart::dynamics::BodyNode* _LeftendEffector,
               dart::dynamics::BodyNode* _RightendEffector);
 
@@ -49,6 +50,9 @@ private:
   /// \brief Robot
   dart::dynamics::SkeletonPtr mRobot;
 
+  /// \brief Robot
+  dart::dynamics::SkeletonPtr mRobotOpt;
+
   /// \brief Left End-effector of the robot
   dart::dynamics::BodyNode* mLeftEndEffector;
 
@@ -72,6 +76,8 @@ private:
   std::vector<double> qref_vec{-M_PI/3, 0.0, 0.0, 0.0, 
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+
+  size_t mSteps;
 };
 
 #endif  // EXAMPLES_OPERATIONALSPACECONTROL_CONTROLLER_HPP_
