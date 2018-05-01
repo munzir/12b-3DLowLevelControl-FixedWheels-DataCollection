@@ -10,11 +10,13 @@ using namespace dart;
 
 //==========================================================================
 Controller::Controller(dart::dynamics::SkeletonPtr _robot,
+                        dart::dynamics::SkeletonPtr _robotopt,
                        dart::dynamics::BodyNode* _LeftendEffector,
                        dart::dynamics::BodyNode* _RightendEffector)
   : mRobot(_robot),
     mLeftEndEffector(_LeftendEffector),
-    mRightEndEffector(_RightendEffector)
+    mRightEndEffector(_RightendEffector),
+    mRobotOpt(_robotopt)
    {
   assert(_robot != nullptr);
   assert(_LeftendEffector != nullptr);
@@ -34,43 +36,35 @@ Controller::Controller(dart::dynamics::SkeletonPtr _robot,
     mKv(i, i) = 250.0;
   }
 
+  mSteps = 0;
 
-  // Remove position limits
-  for (int i = 0; i < dof; ++i)
-    _robot->getJoint(i)->setPositionLimitEnforced(false);
+    // Dump data
+  dataQ.open      ("../data/dataQ.txt");
+  dataQ       << "dataQ" << endl;
 
-  // Set joint damping
-  for (int i = 0; i < dof; ++i)
-    _robot->getJoint(i)->setDampingCoefficient(0, 0.5);
+  dataQref.open   ("../data/dataQref.txt");
+  dataQref    << "dataQref" << endl;
 
+  dataQdot.open   ("../data/dataQdot.txt");
+  dataQdot    << "dataQdot" << endl;
 
-  //   // Dump data
-    // dataQ.open      ("../data/dataQ.txt");
-    // dataQ       << "dataQ" << endl;
+  dataQdotdot.open("../data/dataQdotdot.txt");
+  dataQdotdot << "dataQdotdot" << endl;
 
-    // dataQref.open   ("../data/dataQref.txt");
-    // dataQref    << "dataQref" << endl;
+  dataTorque.open ("../data/dataTorque.txt");
+  dataTorque  << "dataTorque" << endl;
 
-    // dataQdot.open   ("../data/dataQdot.txt");
-    // dataQdot    << "dataQdot" << endl;
+  dataTime.open   ("../data/dataTime.txt");
+  dataTime    << "dataTime" << endl;
 
-    // dataQdotdot.open("../data/dataQdotdot.txt");
-    // dataQdotdot << "dataQdotdot" << endl;
+  dataM.open      ("../data/dataM.txt");
+  dataM       << "dataM" << endl;
 
-    // dataTorque.open ("../data/dataTorque.txt");
-    // dataTorque  << "dataTorque" << endl;
+  dataCg.open     ("../data/dataCg.txt");
+  dataCg      << "dataCg" << endl;
 
-    // dataTime.open   ("../data/dataTime.txt");
-    // dataTime    << "dataTime" << endl;
-
-    // dataM.open      ("../data/dataM.txt");
-    // dataM       << "dataM" << endl;
-
-    // dataCg.open     ("../data/dataCg.txt");
-    // dataCg      << "dataCg" << endl;
-
-    // dataError.open  ("../data/dataError.txt");
-    // dataError   << "dataError" << endl;
+  dataError.open  ("../data/dataError.txt");
+  dataError   << "dataError" << endl;
 }
 
 //=========================================================================
@@ -177,6 +171,8 @@ Eigen::MatrixXd error(Eigen::VectorXd dq, const int dof) {
 void Controller::update(const Eigen::Vector3d& _targetPosition) {
   // using namespace dart;
   // using namespace std;
+  
+  mSteps++;
 
   const int dof = (const int)mRobot->getNumDofs(); // n x 1
   double dt = 0.001;
@@ -262,7 +258,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   qref(0) = qref_vec[0];
 
   comOptParams comParams;
-  comParams.robot = mRobot;
+  comParams.robot = mRobotOpt;
   comParams.qRefInit << qref; 
 
   OptParams constraintOptParams;
@@ -290,16 +286,21 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
 
   opt.set_xtol_rel(1e-4);
 
-  opt.set_maxtime(10);
+  //opt.set_maxtime(10);
 
   opt.optimize(qref_vec, minf);
+  if(mSteps == 1){
+    Eigen::Matrix<double, 18, 1> initialPose(qref_vec.data());
+    mRobot->setPositions(initialPose);
+  }
 
   mTime += dt;
 
   qref(0) = qref_vec[0];
 
-  dqref(0) = (qref_vec[0] - prev_qref0)/dt;
+  dqref(0) = (mSteps==1? 0:((qref_vec[0] - prev_qref0)/dt));
 
+  
   // Get the stuff that we need
   Eigen::MatrixXd  M    = mRobot->getMassMatrix();                // n x n
   Eigen::VectorXd Cg    = mRobot->getCoriolisAndGravityForces();  // n x 1
@@ -309,7 +310,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   Eigen::VectorXd ddqref = -mKp*(q - qref) - mKv*(dq - dqref);    // n x 1
 
   // Optimizer stuff
-  nlopt::opt opt_qp(nlopt::LD_MMA, 18);
+  nlopt::opt opt_qp(nlopt::LD_SLSQP, 18);
   OptParams optParams;
   std::vector<double> ddqref_vec(18);
   // cout << "Initialized optimizer variables ... " << endl << endl;
@@ -324,7 +325,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
 
   opt_qp.set_min_objective(optFunc, &optParams);
   opt_qp.set_xtol_rel(1e-4);
-  opt_qp.set_maxtime(0.005);
+  //opt_qp.set_maxtime(0.005);
   opt_qp.optimize(ddqref_vec, minf);
   Eigen::Matrix<double, 18, 1> ddqRef(ddqref_vec.data());
  
@@ -358,7 +359,7 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   // Apply the joint space forces to the robot
   mRobot->setForces(mForceErr);
 
-  //    1. State q
+  //   1. State q
   dataQ       << q.transpose() << endl;
   dataQref    << qref.transpose() << endl;
   dataQdot    << dq.transpose() << endl;
@@ -373,16 +374,16 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   double T = 2*3.1416/wf;
   if (mTime >= 1*T ) {
     cout << "Time period met. Stopping data recording ...";
-    // dataQ.close();
-    // dataQref.close();
-    // dataQdot.close();
-    // dataQdotdot.close();
-    // dataTorque.close();
-    // dataTime.close();
-    // dataM.close();
-    // dataCg.close();
-    // dataError.close();
-    // cout << "File handles closed!" << endl << endl << endl;
+    dataQ.close();
+    dataQref.close();
+    dataQdot.close();
+    dataQdotdot.close();
+    dataTorque.close();
+    dataTime.close();
+    dataM.close();
+    dataCg.close();
+    dataError.close();
+    cout << "File handles closed!" << endl << endl << endl;
     exit (EXIT_FAILURE);
   }  
 }

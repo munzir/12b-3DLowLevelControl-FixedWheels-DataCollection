@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
   dart::utils::DartLoader dl;
   dart::dynamics::SkeletonPtr ground  = dl.parseSkeleton("dart://sample/urdf/KR5/ground.urdf");
   dart::dynamics::SkeletonPtr robot = createKrang();
+  dart::dynamics::SkeletonPtr robotopt = createKrang();
 
   world->addSkeleton(ground); //add ground and robot to the world pointer
   world->addSkeleton(robot);
@@ -65,7 +66,7 @@ int main(int argc, char* argv[])
   world->setTimeStep(1.0/1000);
 
   // create a window and link it to the world
-  MyWindow window(new Controller(robot, robot->getBodyNode("lGripper"), robot->getBodyNode("rGripper") ) );
+  MyWindow window(new Controller(robot, robotopt, robot->getBodyNode("lGripper"), robot->getBodyNode("rGripper") ) );
   window.setWorld(world);
 
   glutInit(&argc, argv);
